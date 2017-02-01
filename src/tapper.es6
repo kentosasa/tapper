@@ -1,5 +1,3 @@
-'use strict';
-
 exports.version = require('../package').version;
 
 var config = require('./config');
