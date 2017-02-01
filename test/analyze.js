@@ -22,11 +22,15 @@ describe('analyze', function() {
 
   it('knock dectation', function () {
     var waveData = require('./data/knock').waves
-    expect(analyze.load(waveData[0])).to.equal('knock');
+    waveData.forEach(function (ele, index) {
+      expect(analyze.load(ele)).to.equal('knock');
+    })
   })
 
   it('load noise data', function () {
     var waveData = require('./data/noise').waves
-    expect(analyze.load(waveData[0])).to.equal(null);
+    waveData.forEach(function (ele, index) {
+      expect(analyze.load(ele)).to.equal(null);
+    })
   })
 })
