@@ -5,14 +5,16 @@ var should = chai.should();
 var tapper = require('../');
 
 describe('analyze', function() {
-
+  var analyze
   var callback = function (type) {
     console.log(type)
   }
-  var analyze = new tapper.analyze(callback)
+
+  beforeEach(function () {
+    analyze = new tapper.analyze(callback)
+  })
 
   it('init', function () {
-    var analyze = new tapper.analyze(callback)
   })
 
   it('load wave data', function () {

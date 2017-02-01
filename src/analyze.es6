@@ -1,20 +1,34 @@
 var config = require('./config')
-var knock = require('./data/knock')
+var knock = require('../data/knock')
 const waveCenter = config.waveCenter
 
 module.exports = class Analyze {
   constructor (callback) {
     this.callback = callback
+    this.teacher = knock.waves.map((e) => {
+      return { freq: waveToFreq(e), type: 'knock' }
+    })
   }
 
   load (wave) {
-    wave = fetchSample(wave)
-    wave = hammingWindow(wave)
-    let frequency = dft(wave)
-    return 'knock'
+    let freq = waveToFreq(wave)
+    let similalities = this.teacher.map((item) => {
+      return { similality: cosSimilarity(item.freq, freq), type: item.type}
+    })
+    let max = Math.max.apply(Math,similalities.map( function (item) { return item.similality }))
+    let teacher = similalities.find((el) => {
+      return el.similality == max && max > 0.8
+    })
+    return teacher ? teacher.type : null
   }
 }
 
+
+const waveToFreq = (wave) => {
+  wave = fetchSample(wave)
+  wave = hammingWindow(wave)
+  return dft(wave)
+}
 
 // ローパスフィルター
 const lowpassfilter = (wave, passSize) => {
@@ -82,4 +96,25 @@ const dft = (raw) => {
     res.push( Math.sqrt(Re_sum*Re_sum + Im_sum*Im_sum)/2 )
 	}
 	return res;
+}
+
+// cos類似度を出す
+const cosSimilarity = (ary1, ary2) => {
+  let product = 0
+  for (var i = ary1.length - 1; i >= 0; i--) {
+    product += ary1[i]*ary2[i]
+  }
+
+  let ary1Size = 0
+  for (var i = ary1.length - 1; i >= 0; i--) {
+    ary1Size += ary1[i]*ary1[i]
+  }
+  ary1Size = Math.sqrt(ary1Size)
+
+  let ary2Size = 0
+  for (var i = ary2.length - 1; i >= 0; i--) {
+    ary2Size += ary2[i]*ary2[i]
+  }
+  ary2Size = Math.sqrt(ary2Size)
+  return product/ary1Size/ary2Size
 }
