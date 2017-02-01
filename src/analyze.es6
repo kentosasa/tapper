@@ -1,8 +1,13 @@
 var config = require('./config')
 var knock = require('./data/knock')
-module.exports = function (callback) {
-  this.load = function (data) {
-    console.log('hoge')
+
+module.exports = class Analyze {
+  constructor (callback) {
+    this.callback = callback
+    this.name = 'hoge'
+  }
+
+  load (data) {
     return 'knock'
   }
 }
