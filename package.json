@@ -9,7 +9,10 @@
   "author": "kento sasamoto",
   "license": "ISC",
   "devDependencies": {
+    "babelify": "^7.3.0",
     "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
     "mocha": "^3.2.0"
   }
 }
