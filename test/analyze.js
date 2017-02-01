@@ -15,7 +15,7 @@ describe('analyze', function() {
     var analyze = new tapper.analyze(callback)
   })
 
-  it('load', function () {
+  it('load wave data', function () {
     var knockData = require('./data/knock')
     analyze.load(knockData.waves[0])
   })
@@ -25,4 +25,8 @@ describe('analyze', function() {
     expect(analyze.load(waveData[0])).to.equal('knock');
   })
 
+  it('load noise data', function () {
+    var waveData = require('./data/noise').waves
+    expect(analyze.load(waveData[0])).to.equal(null);
+  })
 })
