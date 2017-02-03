@@ -6,5 +6,6 @@ var tapper = require('../');
 describe('config', function() {
   it('init', function () {
     var config = tapper.config
+    expect(config.hoge).to.equal('fuga');
   })
 })

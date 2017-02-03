@@ -1,12 +1,10 @@
 var config = require('./config')
 
 //Web Audio API
-let audioCtx
 let analyser
-const fftSize = config.fftSize
 const waveCenter = config.waveCenter
-let bufferLength
 let waveData
+let waves = []
 
 let callback
 
@@ -31,8 +29,24 @@ class Microphone {
 
     analyser.getByteTimeDomainData(waveData)
     let wave = waveData.slice(0)
-    console.log(getGain(wave))
+    let gain = getGain(wave)
+    waves.push({
+      wave: wave,
+      gain: gain
+    })
+    if (waves.length > config.stockNum) waves.shift()
+    if (isMount(waves)) {
+      waves = []
+      console.log("center")
+    }
   }
+}
+
+const isMount = (waves) => {
+  let max = Math.max.apply(null, waves.map((item)=> {
+    return item.gain
+  }))
+  return waves.length == config.stockNum && max > config.min && max == waves[config.stockNum/2].gain
 }
 
 const getGain = (wave) => {
@@ -48,6 +62,8 @@ const getGain = (wave) => {
 
 //生成時に実行
 const initialize = (loop) => {
+  let audioCtx
+  let bufferLength
   //getUserMedia()の汎用化
   navigator.getMedia = navigator.getUserMedia ||
                        navigator.webkitGetUserMedia ||
@@ -60,7 +76,7 @@ const initialize = (loop) => {
       audioCtx = new AudioContext()
       analyser = audioCtx.createAnalyser()
       analyser.smoothingTimeConstant = 0
-      analyser.fftSize = fftSize
+      analyser.fftSize = config.fftSize
       bufferLength = analyser.frequencyBinCount
 
       let mediastreamsource = audioCtx.createMediaStreamSource(stream)
