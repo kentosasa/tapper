@@ -6,6 +6,5 @@ var tapper = require('../');
 describe('config', function() {
   it('init', function () {
     var config = tapper.config
-    console.log(config)
   })
 })
