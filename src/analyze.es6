@@ -31,11 +31,18 @@ module.exports = class Analyze {
   }
 }
 
-
+//波形を周波数領域に変換
 const waveToFreq = (wave) => {
-  wave = fetchSample(wave)
-  wave = hammingWindow(wave)
-  return dft(wave)
+  // 中心のキレイな波形部分のみ仕様
+  // wave = fetchSample(wave)
+  // wave = hammingWindow(wave)
+  // return dft(wave)
+  let hz = []
+  fetchSamples(wave).forEach((item) => {
+    item = hammingWindow(item)
+    hz = hz.concat(dft(item))
+  })
+  return hz
 }
 
 // ローパスフィルター
@@ -66,9 +73,42 @@ const fetchSample = (wave) => {
   for (var i = maxPoint - sampleNum/2; i < maxPoint + sampleNum/2; i++) {
     res.push(wave[i])
   }
-  //前後の部分の配列も返すようにする
   return res.length > 0 ? res : null
 }
+
+// waveの山の部分と前後の山を取得する
+const fetchSamples = (wave) => {
+  let maxPoint = 0
+  let max = 0
+  let res = []
+  let sampleNum = config.sampleNum
+  for (var i = sampleNum/2; i < wave.length - sampleNum/2; i++) {
+    if (max < Math.abs(wave[i]-waveCenter)) {
+      max = Math.abs(wave[i]-waveCenter)
+      maxPoint = i
+    }
+  }
+  let ary = []
+  for (var i = maxPoint - sampleNum*0.5; i < maxPoint + sampleNum*0.5; i++) {
+    ary.push(wave[i])
+  }
+  res.push(ary)
+
+  ary = []
+  for (var i = maxPoint - sampleNum*1.5; i < maxPoint - sampleNum*0.5; i++) {
+    ary.push(wave[i])
+  }
+  res.push(ary)
+
+  ary = []
+  for (var i = maxPoint + sampleNum*0.5; i < maxPoint + sampleNum*1.5; i++) {
+    ary.push(wave[i])
+  }
+  res.push(ary)
+
+  return res
+}
+
 
 //ハミング窓をかける
 const hammingWindow = (wave) => {
