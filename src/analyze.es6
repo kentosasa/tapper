@@ -19,7 +19,10 @@ module.exports = class Analyze {
     let teacher = similalities.find((el) => {
       return el.similality == max && max > 0.8
     })
-    return teacher ? teacher.type : null
+    return {
+      max: max,
+      type: teacher ? teacher.type : null
+    }
   }
 }
 

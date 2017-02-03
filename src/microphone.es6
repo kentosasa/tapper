@@ -1,4 +1,6 @@
-var config = require('./config')
+var tapper = require('./tapper');
+var config = tapper.config
+var analyze
 
 //Web Audio API
 let analyser
@@ -6,15 +8,11 @@ const waveCenter = config.waveCenter
 let waveData
 let waves = []
 
-let callback
-
 class Microphone {
   constructor (func) {
     // callbackとかanalyzerとか変数は全部class内に持たせたいけれど
     // loop内でメンバ変数の値が読み込めないのでclass外に変数を持たせる
-    callback = func
-    this.callback = callback
-
+    analyze = new tapper.analyze(func)
     initialize()
     window.setInterval(this.loop, 5)
   }
@@ -25,8 +23,6 @@ class Microphone {
       return
     }
 
-    this.callback = this.callback ? this.callback : callback
-
     analyser.getByteTimeDomainData(waveData)
     let wave = waveData.slice(0)
     let gain = getGain(wave)
@@ -36,8 +32,9 @@ class Microphone {
     })
     if (waves.length > config.stockNum) waves.shift()
     if (isMount(waves)) {
+      console.log(analyze.load(waves[config.stockNum/2].wave))
+      window.wave = waves[config.stockNum/2].wave.toString() //保存する用
       waves = []
-      console.log("center")
     }
   }
 }
@@ -51,8 +48,8 @@ const isMount = (waves) => {
 
 const getGain = (wave) => {
 	let max = 0
-	for (var i = 0; i < wave.length; i++) {
-		let val = Math.abs(wave[i]-waveCenter)
+	for (var i = wave.length/config.stockNum*(config.stockNum/2-1); i < wave.length/config.stockNum*(config.stockNum/2+1); i++) {
+		let val = Math.abs(wave[parseInt(i)]-waveCenter)
 		if (val > max) {
 			max = val
 		}

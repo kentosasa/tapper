@@ -25,14 +25,14 @@ describe('analyze', function() {
   it('knock dectation', function () {
     var waveData = require('./data/knock').waves
     waveData.forEach(function (ele, index) {
-      expect(analyze.load(ele)).to.equal('knock');
+      expect(analyze.load(ele).type).to.equal('knock');
     })
   })
 
   it('load noise data', function () {
     var waveData = require('./data/noise').waves
     waveData.forEach(function (ele, index) {
-      expect(analyze.load(ele)).to.equal(null);
+      expect(analyze.load(ele).type).to.equal(null);
     })
   })
 })
