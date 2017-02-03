@@ -35,4 +35,11 @@ describe('analyze', function() {
       expect(analyze.load(ele).type).to.equal(null);
     })
   })
+
+  it('load clap data', function () {
+    var waveData = require('./data/clap').waves
+    waveData.forEach(function (ele, index) {
+      expect(analyze.load(ele).type).to.equal('clap');
+    })
+  })
 })

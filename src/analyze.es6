@@ -1,5 +1,6 @@
 var config = require('./config')
 var knock = require('../data/knock')
+var clap = require('../data/clap')
 const waveCenter = config.waveCenter
 
 module.exports = class Analyze {
@@ -8,6 +9,10 @@ module.exports = class Analyze {
     this.teacher = knock.waves.map((e) => {
       return { freq: waveToFreq(e), type: 'knock' }
     })
+    this.teacher = this.teacher.concat(clap.waves.map((e) => {
+      return { freq: waveToFreq(e), type: 'clap' }
+    }))
+
   }
 
   load (wave) {
@@ -61,6 +66,7 @@ const fetchSample = (wave) => {
   for (var i = maxPoint - sampleNum/2; i < maxPoint + sampleNum/2; i++) {
     res.push(wave[i])
   }
+  //前後の部分の配列も返すようにする
   return res.length > 0 ? res : null
 }
 
@@ -86,7 +92,7 @@ const dft = (raw) => {
 	let Re = [];// [出力] 実数部
 	let Im = [];// [出力] 虚数部
 	let N = raw.length;
-	for( let j = 0; j < N/8; ++j ) { //低周波数帯しか確認しない
+	for( let j = 0; j < N/4; ++j ) { //低周波数帯しか確認しない
 		let Re_sum = 0.0;
 		let Im_sum = 0.0
 		for (var i = 0; i < N; i++) {
@@ -98,6 +104,7 @@ const dft = (raw) => {
 		Im.push( Im_sum );
     res.push( Math.sqrt(Re_sum*Re_sum + Im_sum*Im_sum)/2 )
 	}
+
 	return res;
 }
 
