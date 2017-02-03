@@ -22,7 +22,7 @@ module.exports = class Analyze {
     })
     let max = Math.max.apply(Math,similalities.map( function (item) { return item.similality }))
     let teacher = similalities.find((el) => {
-      return el.similality == max && max > 0.75
+      return el.similality == max && max > 0.78
     })
     return {
       max: max,
@@ -92,7 +92,7 @@ const dft = (raw) => {
 	let Re = [];// [出力] 実数部
 	let Im = [];// [出力] 虚数部
 	let N = raw.length;
-	for( let j = 0; j < N/4; ++j ) { //低周波数帯しか確認しない
+	for( let j = 0; j < N/8; ++j ) { //低周波数帯しか確認しない
 		let Re_sum = 0.0;
 		let Im_sum = 0.0
 		for (var i = 0; i < N; i++) {

@@ -34,6 +34,14 @@ class Microphone {
     if (isMount(waves)) {
       console.log(analyze.load(waves[config.stockNum/2].wave))
       window.wave = waves[config.stockNum/2].wave.toString() //保存する用
+      if (window.waves) {
+        window.waves.push(waves[config.stockNum/2].wave)
+        window.wavesString = window.waves.map((item) => {
+          return item.join()
+        }).join('\n')
+      } else {
+        window.waves = []
+      }
       waves = []
     }
   }
