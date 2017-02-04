@@ -32,7 +32,7 @@ class Microphone {
     })
     if (waves.length > config.stockNum) waves.shift()
     if (isMount(waves)) {
-      console.log(analyze.load(waves[config.stockNum/2].wave))
+      analyze.load(waves[config.stockNum/2].wave)
 
       //保存する用
       // window.wave = waves[config.stockNum/2].wave.toString()

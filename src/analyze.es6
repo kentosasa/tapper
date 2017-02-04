@@ -24,10 +24,14 @@ module.exports = class Analyze {
     let teacher = similalities.find((el) => {
       return el.similality == max && max > 0.7
     })
-    return {
+    
+    let res = {
+      gain: getGain(wave),
       max: max,
       type: teacher ? teacher.type : null
     }
+    this.callback(res)
+    return res
   }
 }
 
@@ -43,6 +47,17 @@ const waveToFreq = (wave) => {
     hz = hz.concat(dft(item))
   })
   return hz
+}
+
+const getGain = (wave) => {
+	let max = 0
+	for (var i = wave.length/config.stockNum*(config.stockNum/2-1); i < wave.length/config.stockNum*(config.stockNum/2+1); i++) {
+		let val = Math.abs(wave[parseInt(i)]-waveCenter)
+		if (val > max) {
+			max = val
+		}
+	}
+	return max
 }
 
 // ローパスフィルター
