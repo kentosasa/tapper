@@ -4,13 +4,16 @@ var plumber = require('gulp-plumber');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 
+var samples = ['knockAlert']
 gulp.task('browserify', function(){
-  browserify({
-    entries: ['./sample/main.js']
+  samples.forEach((item) => {
+    browserify({
+      entries: ['./sample/' + item + '/main.js']
+    })
+    .bundle()
+    .pipe(source('bundle.js'))
+    .pipe(gulp.dest('./sample/' + item));
   })
-  .bundle()
-  .pipe(source('bundle.js'))
-  .pipe(gulp.dest('./sample/'));
 });
 
 gulp.task('babel', function() {
@@ -24,4 +27,4 @@ gulp.task('watch', function() {
   gulp.watch('./src/*.es6', ['babel', 'browserify'])
 });
 
-gulp.task('default', ['babel', 'watch']);
+gulp.task('default', ['babel', 'watch', 'browserify']);
