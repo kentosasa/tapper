@@ -4,7 +4,7 @@ var plumber = require('gulp-plumber');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 
-var samples = ['clapAlert', 'knockCookRecipe']
+var samples = ['clapAlert', 'knockCookRecipe', 'snapCamera']
 gulp.task('browserify', function(){
   samples.forEach((item) => {
     browserify({
