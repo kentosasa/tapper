@@ -8,6 +8,7 @@ const waveCenter = config.waveCenter
 let waveData
 let waves = []
 
+// TODO analyzer classを継承したほうがキレイかな。けど今はclassの外にいろんなメソッドを置いてしまってるから無理だよ
 class Microphone {
   constructor (func, opt) {
     // callbackとかanalyzerとか変数は全部class内に持たせたいけれど
