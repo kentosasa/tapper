@@ -1,26 +1,30 @@
 var config = require('./config')
-var knock = require('../data/knock')
-var clap = require('../data/clap')
-var snap = require('../data/snap')
 const waveCenter = config.waveCenter
 
 module.exports = class Analyze {
-  constructor (callback, opt = []) {
+  constructor (callback, opt = { types: ['all'] }) {
     this.callback = callback
-    if (opt.length > 0) {
-      console.log('have option')
+    if (opt.types[0] == 'all') {
+      var knock = require('../data/knock')
+      this.teacher = knock.waves.map((e) => {
+        return { freq: waveToFreq(e), type: 'knock' }
+      })
+      var clap = require('../data/clap')
+      this.teacher = this.teacher.concat(clap.waves.map((e) => {
+        return { freq: waveToFreq(e), type: 'clap' }
+      }))
+      var snap = require('../data/snap')
+      this.teacher = this.teacher.concat(snap.waves.map((e) => {
+        return { freq: waveToFreq(e), type: 'snap' }
+      }))
     } else {
-      console.log('dont have option')
+      opt.types.forEach((item) => {
+        var data = require('../data/'+item)
+        this.teacher = data.waves.map((e) => {
+          return { freq: waveToFreq(e), type: item }
+        })
+      })
     }
-    this.teacher = knock.waves.map((e) => {
-      return { freq: waveToFreq(e), type: 'knock' }
-    })
-    this.teacher = this.teacher.concat(clap.waves.map((e) => {
-      return { freq: waveToFreq(e), type: 'clap' }
-    }))
-    this.teacher = this.teacher.concat(snap.waves.map((e) => {
-      return { freq: waveToFreq(e), type: 'snap' }
-    }))
   }
 
   load (wave) {

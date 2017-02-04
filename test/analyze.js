@@ -17,6 +17,18 @@ describe('analyze', function() {
   it('init', function () {
   })
 
+  it('option is available', function() {
+    analyze = new tapper.analyze(callback, {types: ['clap']})
+    var waveData = require('./data/knock').waves
+    waveData.forEach(function (ele, index) {
+      expect(analyze.load(ele).type).not.to.equal('knock');
+    })
+    analyze = new tapper.analyze(callback, {types: ['clap', 'knock']})
+    waveData.forEach(function (ele, index) {
+      expect(analyze.load(ele).type).to.equal('knock');
+    })
+  })
+
   it('load wave data', function () {
     var knockData = require('./data/knock')
     analyze.load(knockData.waves[0])
