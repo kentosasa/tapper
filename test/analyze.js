@@ -66,7 +66,14 @@ describe('analyze', function() {
         count = count+1
       }
     })
-    expect(count/size > 0.8).to.equal(true);
+    expect(count/size > 0.85).to.equal(true);
     console.log('指パッチン正答率' + size + '中' + count + '門: ' + count/size)
+  })
+
+  it('load finger joint data', function () {
+    var waveData = require('./data/fingerJoint').waves
+    waveData.forEach(function (ele, index) {
+      expect(analyze.load(ele).type).to.equal('fingerJoint');
+    })
   })
 })

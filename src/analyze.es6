@@ -17,6 +17,11 @@ module.exports = class Analyze {
       this.teacher = this.teacher.concat(snap.waves.map((e) => {
         return { freq: waveToFreq(e), type: 'snap' }
       }))
+      var snap = require('../data/fingerJoint')
+      this.teacher = this.teacher.concat(snap.waves.map((e) => {
+        return { freq: waveToFreq(e), type: 'fingerJoint' }
+      }))
+
     } else {
       opt.types.forEach((item) => {
         var data = require('../data/'+item)
@@ -34,9 +39,8 @@ module.exports = class Analyze {
     })
     let max = Math.max.apply(Math,similalities.map( function (item) { return item.similality }))
     let teacher = similalities.find((el) => {
-      return el.similality == max && max > 0.7
+      return el.similality == max && max > 0.74
     })
-
     let res = {
       gain: getGain(wave),
       max: max,
