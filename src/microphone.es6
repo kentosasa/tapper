@@ -9,10 +9,10 @@ let waveData
 let waves = []
 
 class Microphone {
-  constructor (func) {
+  constructor (func, opt) {
     // callbackとかanalyzerとか変数は全部class内に持たせたいけれど
     // loop内でメンバ変数の値が読み込めないのでclass外に変数を持たせる
-    analyze = new tapper.analyze(func)
+    analyze = new tapper.analyze(func, opt)
     initialize()
     window.setInterval(this.loop, 5)
   }
