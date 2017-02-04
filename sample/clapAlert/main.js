@@ -1,13 +1,13 @@
 var tapper = require('../../');
 var microphone
 var opt = {
-  types: ['knock']
+  types: ['clap']
 }
 var callback = function (res) {
   console.log(res)
   switch (res.type) {
-    case 'knock':
-      alert('knocked')
+    case 'clap':
+      alert('claped')
       break;
     default:
 
