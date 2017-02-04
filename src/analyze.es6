@@ -1,18 +1,26 @@
 var config = require('./config')
 var knock = require('../data/knock')
 var clap = require('../data/clap')
+var snap = require('../data/snap')
 const waveCenter = config.waveCenter
 
 module.exports = class Analyze {
-  constructor (callback) {
+  constructor (callback, opt = []) {
     this.callback = callback
+    if (opt.length > 0) {
+      console.log('have option')
+    } else {
+      console.log('dont have option')
+    }
     this.teacher = knock.waves.map((e) => {
       return { freq: waveToFreq(e), type: 'knock' }
     })
     this.teacher = this.teacher.concat(clap.waves.map((e) => {
       return { freq: waveToFreq(e), type: 'clap' }
     }))
-
+    this.teacher = this.teacher.concat(snap.waves.map((e) => {
+      return { freq: waveToFreq(e), type: 'snap' }
+    }))
   }
 
   load (wave) {
@@ -24,7 +32,7 @@ module.exports = class Analyze {
     let teacher = similalities.find((el) => {
       return el.similality == max && max > 0.7
     })
-    
+
     let res = {
       gain: getGain(wave),
       max: max,
