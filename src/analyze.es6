@@ -23,11 +23,12 @@ module.exports = class Analyze {
       }))
 
     } else {
+      this.teacher = []
       opt.types.forEach((item) => {
         var data = require('../data/'+item)
-        this.teacher = data.waves.map((e) => {
+        this.teacher = this.teacher.concat(data.waves.map((e) => {
           return { freq: waveToFreq(e), type: item }
-        })
+        }))
       })
     }
   }
