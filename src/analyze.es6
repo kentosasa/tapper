@@ -22,7 +22,7 @@ module.exports = class Analyze {
     })
     let max = Math.max.apply(Math,similalities.map( function (item) { return item.similality }))
     let teacher = similalities.find((el) => {
-      return el.similality == max && max > 0.75
+      return el.similality == max && max > 0.7
     })
     return {
       max: max,
