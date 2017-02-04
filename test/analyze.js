@@ -70,10 +70,10 @@ describe('analyze', function() {
     console.log('指パッチン正答率' + size + '中' + count + '門: ' + count/size)
   })
 
-  it('load finger joint data', function () {
-    var waveData = require('./data/fingerJoint').waves
+  it('load knuckle data', function () {
+    var waveData = require('./data/knuckle').waves
     waveData.forEach(function (ele, index) {
-      expect(analyze.load(ele).type).to.equal('fingerJoint');
+      expect(analyze.load(ele).type).to.equal('knuckle');
     })
   })
 })
