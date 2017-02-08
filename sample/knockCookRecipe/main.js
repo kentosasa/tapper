@@ -1,9 +1,3 @@
-var tapper = require('../../')
-var microphone
-var opt = {
-  types: ['knock']
-}
-
 var data = {
   currentPage: 0,
   recipe: [
@@ -93,6 +87,11 @@ var view = {
 
 var knock = {
   init: function () {
+    var tapper = require('../../')
+    var opt = {
+      types: ['knock']
+    }
+
     var callback = function (res) {
       console.log(res)
       switch (res.type) {
@@ -101,7 +100,7 @@ var knock = {
           break
       }
     }
-    microphone = new tapper.microphone(callback, opt)
+    this.microphone = new tapper.microphone(callback, opt)
   }
 }
 

@@ -1,7 +1,3 @@
-var opt = {
-  types: ['knock', 'knuckle']
-}
-
 var data = {
   currentHeight: 0
 }
@@ -68,8 +64,11 @@ var tapper = {
           break
       }
     }
-    var microphone = require('../../').microphone
-    microphone = new microphone(callback, opt)
+    var tapper = require('../../')
+    var opt = {
+      types: ['knock', 'knuckle']
+    }
+    this.microphone = new tapper.microphone(callback, opt)
   }
 }
 
