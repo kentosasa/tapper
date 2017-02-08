@@ -30,31 +30,33 @@ body, html {
   .item {
     overflow: hidden;
     margin-bottom: 26px;
+    transition: all 0.5s;
   }
   .none {
     height: 0px;
     margin: 0px;
+    opacity: 0;
   }
   .small {
     height: 120px;
+    padding: -8px;
   }
   .big {
     height: 120px;
     background: #eeeeee;
-    padding: 8px;
   }
   .title {
     color: #1A0DAB;
     margin: 0px;
     font-size: 18px;
   }
-  .url {
+  a {
     color: #006621;
     height: 21px;
     font-size: 14px;
   }
   .snippet {
-    color: #006621;
+    color: #545454;
     font-size: 14px;
   }
 }

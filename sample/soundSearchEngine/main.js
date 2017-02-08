@@ -44,6 +44,7 @@ var controller = {
   },
 
   next: function() {
+    model.setStatus('move')
     model.next()
     view.render()
   },
@@ -107,7 +108,9 @@ var view = {
             } else if ( currentEntry-2 <= i && i <= currentEntry+2) {
               className = 'small'
             }
-            contents += '<div class="item '
+            contents += '<div id="item'
+               + i
+               + '" class="item '
                + className
                + '">'
                + '<p class="title">'
@@ -124,6 +127,20 @@ var view = {
                + '</div>'
           }
           main.innerHTML = contents
+          break
+        case 'move':
+          intro.style.display = "none"
+          searchBox.style.display = "none"
+          var contents = ''
+          for (var i = 0; i < entries.length; i++) {
+            var className = 'none'
+            if ( i == currentEntry) {
+              className = 'big'
+            } else if ( currentEntry-2 <= i && i <= currentEntry+2) {
+              className = 'small'
+            }
+            document.getElementById('item' + i).className = 'item ' + className
+          }
           break
       }
     }
