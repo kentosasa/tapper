@@ -2,7 +2,7 @@ var data = {
   currentEntry: -1,
   entries: [
   ],
-  searching: false
+  status: 'intro'
 }
 
 var model = {
@@ -10,13 +10,11 @@ var model = {
   },
 
   next: function() {
-    if (!data.searching) {
-      data.currentEntry = data.currentEntry < data.entries.length-1 ?  data.currentEntry + 1 : 0
-    }
+    data.currentEntry = data.currentEntry < data.entries.length-1 ?  data.currentEntry + 1 : 0
   },
 
   setEntries: function (value) {
-    data.currentEntry = 0
+    data.currentEntry = 10
     data.entries = value
   },
 
@@ -24,20 +22,16 @@ var model = {
     return data.entries
   },
 
-  search: function () {
-    data.searching = true
-  },
-
-  searchFinish: function () {
-    data.searching = false
-  },
-
   currentEntry: function () {
     return data.currentEntry
   },
 
-  searching: function () {
-    return data.searching
+  status: function () {
+    return data.status
+  },
+
+  setStatus: function (status) {
+    data.status = status
   }
 }
 
@@ -55,13 +49,16 @@ var controller = {
   },
 
   search: function() {
-    model.search()
+    model.setStatus('searching')
     speechSearch.speechStart()
     view.render()
   },
 
+  showEntries: function() {
+    model.setStatus('list')
+  },
+
   setEntries: function (value) {
-    model.searchFinish()
     model.setEntries(value)
     view.render()
   },
@@ -74,8 +71,8 @@ var controller = {
     return model.currentEntry()
   },
 
-  isSearching: function () {
-    return model.searching()
+  getStatus: function () {
+    return model.status()
   }
 }
 
@@ -89,13 +86,45 @@ var view = {
       var intro = document.getElementById('intro')
       var searchBox = document.getElementById('searchBox')
       var currentEntry = controller.getCurrentEntry()
-
-      if (currentEntry == -1) {
-        console.log('status: intro')
-      } else if (controller.isSearching()) {
-        console.log('status: searching')
-      } else {
-        console.log('status: show')
+      var entries = controller.getEntries()
+      console.log(controller.getStatus())
+      switch (controller.getStatus()) {
+        case 'intro':
+          intro.style.display = "block"
+          searchBox.style.display = "none"
+          break
+        case 'searching':
+          searchBox.style.display = "flex"
+          break
+        case 'list':
+          intro.style.display = "none"
+          searchBox.style.display = "none"
+          var contents = ''
+          for (var i = 0; i < entries.length; i++) {
+            var className = 'none'
+            if ( i == currentEntry) {
+              className = 'big'
+            } else if ( currentEntry-2 <= i && i <= currentEntry+2) {
+              className = 'small'
+            }
+            contents += '<div class="item '
+               + className
+               + '">'
+               + '<p class="title">'
+               + entries[i].name
+               + '</p>'
+               + '<a href="'
+               + entries[i].url
+               + '">'
+               + entries[i].displayUrl
+               + '</a>'
+               + '<p class="snippet">'
+               + entries[i].snippet
+               + '</p>'
+               + '</div>'
+          }
+          main.innerHTML = contents
+          break
       }
     }
 }
@@ -126,6 +155,7 @@ var speechSearch = {
     this.recognition = new webkitSpeechRecognition()
     this.recognition.lang = 'ja'
     this.recognition.addEventListener('result', this.speechCallback, false);
+    this.recognition.onresult = controller.showEntries
   },
 
   speechStart() {
@@ -133,12 +163,13 @@ var speechSearch = {
   },
 
   speechCallback: function (event) {
+    controller.showEntries()
     speechSearch.callSearchAPI(event.results.item(0).item(0).transcript)
   },
 
   callSearchAPI: function (keyword) {
     var xhr = new XMLHttpRequest()
-    var url = "https://api.cognitive.microsoft.com/bing/v5.0/images/search?q=" + keyword + "&count=100"
+    var url = "https://api.cognitive.microsoft.com/bing/v5.0/search?q=" + keyword + "&count=100"
     xhr.open("GET" , url)
     xhr.responseType = 'json';
     xhr.setRequestHeader("Content-Type", "application/json")
@@ -148,7 +179,7 @@ var speechSearch = {
   },
 
   callbackSearchAPI: function (event) {
-    controller.setEntries(event.target.response.value)
+    controller.setEntries(event.target.response.webPages.value)
   }
 }
 
