@@ -4,7 +4,7 @@ var plumber = require('gulp-plumber');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 
-var samples = ['clapAlert', 'knockCookRecipe', 'snapCamera', 'knuckleKnockScroll']
+var samples = ['clapAlert', 'knockCookRecipe', 'snapCamera', 'knuckleKnockScroll', 'soundSearchEngine']
 gulp.task('browserify', function(){
   samples.forEach((item) => {
     browserify({
@@ -24,7 +24,8 @@ gulp.task('babel', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('./src/*.es6', ['babel', 'browserify'])
+  gulp.watch('./src/*.es6', ['babel'])
+  gulp.watch('./**/main.js', ['browserify'])
 });
 
 gulp.task('default', ['babel', 'watch', 'browserify']);
