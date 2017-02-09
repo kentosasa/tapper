@@ -57,6 +57,7 @@ var controller = {
 
   showEntries: function() {
     model.setStatus('list')
+    view.render()
   },
 
   setEntries: function (value) {
