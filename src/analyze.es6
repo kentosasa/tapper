@@ -17,8 +17,8 @@ module.exports = class Analyze {
       this.teacher = this.teacher.concat(snap.waves.map((e) => {
         return { freq: waveToFreq(e), type: 'snap' }
       }))
-      var snap = require('../data/knuckle')
-      this.teacher = this.teacher.concat(snap.waves.map((e) => {
+      var knuckle = require('../data/knuckle')
+      this.teacher = this.teacher.concat(knuckle.waves.map((e) => {
         return { freq: waveToFreq(e), type: 'knuckle' }
       }))
 
